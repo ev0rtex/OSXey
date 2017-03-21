@@ -75,13 +75,10 @@ model=$(system_profiler SPHardwareDataType | awk '/Model Identifier/ { print $3 
 modelname=`grep $model $DIR/Models.txt | sed -e 's/).*/)/g'`
 
 # ==GRAPHICS==
-graphics=$(system_profiler SPDisplaysDataType |
-awk '/Model/{for (i=1; i<=NF-2; i++) $i = $(i+2); NF-=2; print}' | paste -sd "/" -)
-
-graphicsnoBrand=$(system_profiler SPDisplaysDataType |
-awk '/Model/{for (i=1; i<=NF-3; i++) $i = $(i+3); NF-=3; print}' | paste -sd "/" -)
-
-resolution=$(system_profiler SPDisplaysDataType | grep Resolution | cut -d':' -f2 | sed -e 's/^[ \t]*//' | awk '$1=$1' ORS=' ')
+graphicsData=$(system_profiler SPDisplaysDataType)
+graphics=$(awk '/Model/{for (i=1; i<=NF-2; i++) $i = $(i+2); NF-=2; print}' <<< "$graphicsData" | paste -sd "/" -)
+graphicsnoBrand=$(awk '/Model/{for (i=1; i<=NF-3; i++) $i = $(i+3); NF-=3; print}' <<< "$graphicsData" | paste -sd "/" -)
+resolution=$(grep Resolution <<< "$graphicsData" | cut -d':' -f2 | sed -e 's/^[ \t]*//' | awk '$1=$1' ORS=' ')
 
 # Use system_profiler to find graphics cards, then awk to find 'Model'
 # Output of this step is lines such as this:
