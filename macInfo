@@ -105,6 +105,10 @@ versionConvention="OS X"
 [[ $versionNumber =~ ^[0-9]+\.[0-9]+ ]] && versionShort="${BASH_REMATCH[0]}" # Get first 2 portions of semver
 
 case $versionShort in
+    10.13)
+        versionString="High Sierra"
+        versionConvention="macOS"
+        ;;
 	10.12)
 		versionString="Sierra"
 		versionConvention="macOS"
